@@ -1,0 +1,10 @@
+fastapi==0.63.0
+uvicorn==0.13.3
+graphene==3.0
+pytest==6.2.5
+pytest-watch==4.2.0  # ptwコマンドでファイル編集時に自動テスト
+requests==2.27.1
+python-jose==3.3.0
+passlib==1.7.4
+python-multipart==0.0.5
+neomodel==4.0.8

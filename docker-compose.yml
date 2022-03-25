@@ -1,0 +1,28 @@
+version: '3'
+services:
+    api:
+        container_name: "knowde_api"
+        build:
+            context: .
+            dockerfile: docker/api/Dockerfile
+        restart: always
+        tty: true
+        command: python3 -m uvicorn api:app --reload --host 0.0.0.0 --port 8000
+        volumes:
+            - ./app:/api/app
+        ports:
+            -   8000:8000
+        # environment:
+        #     - NEO4J_USERNAME: ${NEO4J_USER}
+        #     - NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+        #     - NEO4J_BOLT_URL:
+    neo4j:
+        image: neo4j:4.4.4
+        container_name: graph_db
+        ports:
+            - 7474:7474 # GIU
+            - 7687:7687 # Web API
+        volumes:
+            - ./docker/neo4j/data:/data
+            - ./docker/neo4j/logs:/logs
+            - ./docker/neo4j/conf:/conf
