@@ -1,0 +1,40 @@
+from neomodel import (db, StructuredNode, StringProperty, IntegerProperty,
+                      UniqueIdProperty, DateTimeProperty,  RelationshipTo)
+# from neo4j import GraphDatabase, basic_auth
+
+# URI    = "neo4j://localhost:7687" # コンテナ間通信ではlocalhostを使用できない
+# URI    = "neo4j://neo4j:7687" # コンテナ間通信ではlocalhostを使用できない
+# USR    = "neo4j"
+# PASSWD = "knowde"
+# auth = basic_auth(USR, PASSWD)
+
+
+class User(StructuredNode):
+    # id              = StringProperty(unique_index=True, required=True)
+    uid              = UniqueIdProperty()
+    hashed_password = StringProperty()
+    name            = StringProperty(index=True)
+    created         = DateTimeProperty(default_now=True)
+    spaces          = RelationshipTo("Space", "OWN")
+
+
+class Guild(StructuredNode):
+    pass
+
+
+class Space(StructuredNode):
+    uid       = UniqueIdProperty()
+    name      = StringProperty(index=True, required=True)
+    belong_to = RelationshipTo("Knowde", "BELONG_TO")
+
+
+class Reference(StructuredNode):
+    uid    = UniqueIdProperty()
+    name   = StringProperty(required=True)
+    author = StringProperty()
+    url    = StringProperty()
+
+
+class Knowde(StructuredNode):
+    uid    = UniqueIdProperty()
+    name   = StringProperty(required=True)
