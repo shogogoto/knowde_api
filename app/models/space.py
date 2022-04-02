@@ -6,6 +6,7 @@ from anytree.util import commonancestors
 # find結果が想定と異なる Python 3.4までしか対応してないからか。。
 from anytree import cachedsearch as CS
 from anytree import search as S
+from anytree import RenderTree
 import fastcache
 
 
@@ -36,6 +37,8 @@ class BaseSpace(AnyNode):
     def __hash__(self):
         return hash(self.id)
 
+    def print(self):
+        print(RenderTree(self))
 
 class Space(BaseSpace):
     def __init__(self, name: str, parent=None, children=None, **kwargs):
@@ -116,6 +119,7 @@ class SpaceChain:
         chain  = leaf.ancestors + (leaf,)
         ids    = [anc.id for anc in leaf.ancestors]
         founds = S.findall(other.root, lambda node: node.id in ids)
+        if len(founds) == 0: return
         head   = founds[0]
         tail   = founds[-1]
         if head is not None:

@@ -17,8 +17,8 @@ def fn():
     if repo.findById(uid) is not None:
         repo.delete(cred)
     yield
-    if repo.findById(uid) is not None:
-        repo.delete(cred)
+    # if repo.findById(uid) is not None:
+    #     repo.delete(cred)
 
 
 def test_create_cred(fn):

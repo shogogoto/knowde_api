@@ -1,5 +1,20 @@
-from neomodel import (db, StructuredNode, StringProperty, IntegerProperty,
-                      UniqueIdProperty, DateTimeProperty,  RelationshipTo)
+from neomodel import (
+    db,
+    StructuredNode,
+    StringProperty,
+    IntegerProperty,
+    UniqueIdProperty,
+    DateTimeProperty,
+    RelationshipTo,
+    RelationshipFrom,
+)
+
+from neomodel.cardinality import (
+    ZeroOrMore,
+    One,
+    OneOrMore,
+    ZeroOrOne
+)
 # from neo4j import GraphDatabase, basic_auth
 
 # URI    = "neo4j://localhost:7687" # コンテナ間通信ではlocalhostを使用できない
@@ -15,18 +30,21 @@ class User(StructuredNode):
     hashed_password = StringProperty()
     name            = StringProperty(index=True)
     created         = DateTimeProperty(default_now=True)
-    spaces          = RelationshipTo("Space", "OWN")
+    spaces          = RelationshipTo("Space", "OWN", cardinality=ZeroOrMore)
 
 
 class Guild(StructuredNode):
-    pass
+    members = RelationshipTo("User", "MEMBER")
 
 
 class Space(StructuredNode):
-    uid       = UniqueIdProperty()
-    name      = StringProperty(index=True, required=True)
-    belong_to = RelationshipTo("Knowde", "BELONG_TO")
-
+    uid        = UniqueIdProperty()
+    name       = StringProperty(index=True, required=True)
+    owner      = RelationshipFrom("User", "OWN", cardinality=One)
+    parent     = RelationshipFrom("Space", "CONTAINS")
+    subspaces  = RelationshipTo("Space", "CONTAINS")
+    references = RelationshipTo("Reference", "BELONG_TO")
+    knowds     = RelationshipTo("Knowde", "BELONG_TO")
 
 class Reference(StructuredNode):
     uid    = UniqueIdProperty()
