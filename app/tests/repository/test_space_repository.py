@@ -23,8 +23,7 @@ def fn():
     # if cRepo.findById(userId) is not None:
     #     cRepo.delete(cred)
 
-# 子が一括で削除される
-# childrenを一括Move
+@pytest.mark.slow
 def test_create(fn):
     s = Space(name="a")
     t = repo.create(userId, s)
@@ -32,6 +31,7 @@ def test_create(fn):
     assert found == t
     repo.delete(t.id)
 
+@pytest.mark.slow
 def test_create_subspace(fn):
     s1 = Space(name="s1")
     s2 = Space(name="s2")
@@ -50,6 +50,7 @@ def test_create_subspace(fn):
     for c in found.children:
         repo.delete(c.id)
 
+@pytest.mark.slow
 def test_batch_create_and_delete(fn):
     root = SpaceRoot(userId)
     a = Space(name="a", id="a", parent=root)
@@ -65,6 +66,7 @@ def test_batch_create_and_delete(fn):
     assert root == found
     repo.deleteBatch(found)
 
+@pytest.mark.slow
 def test_move_subspace(fn):
     root = SpaceRoot(userId)
     a = Space(name="a", id="a", parent=root)
@@ -85,6 +87,7 @@ def test_move_subspace(fn):
     assert found == root
     repo.deleteBatch(root)
 
+@pytest.mark.slow
 def test_update(fn):
     bfr = repo.create(userId, Space(name="before"))
     bfr.name = "after"

@@ -20,20 +20,23 @@ def fn():
     # if repo.findById(uid) is not None:
     #     repo.delete(cred)
 
-
+@pytest.mark.slow
 def test_create_cred(fn):
     repo.create(cred)
     assert repo.findById(uid) is not None
 
+@pytest.mark.slow
 def test_create_duplicate_id(fn):
     repo.create(cred)
     with pytest.raises(AlreadyExistsError) as e:
         repo.create(cred)
 
+@pytest.mark.slow
 def test_not_exists_update(fn):
     with pytest.raises(NotFoundError):
         repo.update(cred, cred)
 
+@pytest.mark.slow
 def test_invalid_update(fn):
     repo.create(cred)
     cred2 = Credential(uid, PlainPassword("diff_password"))
@@ -41,6 +44,7 @@ def test_invalid_update(fn):
     with pytest.raises(ValueError) as e:
         repo.update(cred2, new)
 
+@pytest.mark.slow
 def test_update(fn):
     repo.create(cred)
     new_passwd = PlainPassword("new_password")
