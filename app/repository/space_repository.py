@@ -1,29 +1,15 @@
-from typing import Union
-from models.utils import flatten
-import itertools
 from neomodel import db
 from neomodel import Relationship
 from neo4j.graph import Node
 
-from .user_repository import UserRepository
+from models.utils import flatten
 from models import check_type
 from models.space import Space, SpaceRoot, SpaceChain
 from .labels import Space as DbSpace, User as DbUser
 from .errors import NotFoundError, AlreadyExistsError
 
 
-# delete insert
 class SpaceRepository:
-    def __init__(self):
-        self._userDb = UserRepository()
-
-    def __findUser(self, userId: str):
-        check_type(userId, str)
-        dbuser = DbUser.nodes.get_or_none(uid=userId)
-        if dbuser is None:
-            raise NotFoundError("space can't make because user is not found")
-        return dbuser
-
     @db.transaction
     def create(self, userId: str, space: Space):
         dbuser = self.__findUser(userId)
@@ -99,7 +85,6 @@ class SpaceRepository:
     @db.transaction
     def findByOwner(self, userId: str):
         check_type(userId, str)
-        dbuser = DbUser.nodes.get_or_none(uid=userId)
         # 関係の深さ*の書き方が非推奨
         params = {"id": userId}
         result, meta = db.cypher_query("""
@@ -129,6 +114,13 @@ class SpaceRepository:
         check_type(spaceId, str)
         dbs = DbSpace.nodes.get_or_none(uid=spaceId)
         return self._decode(dbs)
+
+    def __findUser(self, userId: str):
+        check_type(userId, str)
+        dbuser = DbUser.nodes.get_or_none(uid=userId)
+        if dbuser is None:
+            raise NotFoundError("space can't make because user is not found")
+        return dbuser
 
     def _encode(self, space: Space):
         check_type(space, Space)

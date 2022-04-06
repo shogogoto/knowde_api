@@ -10,3 +10,4 @@ python-multipart==0.0.5
 neomodel==4.0.8
 anytree==2.8.0
 fastcache==1.1.0
+networkx==2.7.1

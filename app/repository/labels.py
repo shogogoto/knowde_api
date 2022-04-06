@@ -54,5 +54,9 @@ class Reference(StructuredNode):
 
 
 class Knowde(StructuredNode):
-    uid    = UniqueIdProperty()
-    name   = StringProperty(required=True)
+    uid  = UniqueIdProperty()
+    name = StringProperty(index=True, required=True)
+    src  = RelationshipFrom("Knowde", "LINK") # sourceという名前が使用済みで使えなかった
+    dest = RelationshipTo("Knowde", "LINK")
+
+
