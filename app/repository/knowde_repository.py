@@ -1,11 +1,11 @@
 from typing import Union
-from models.utils import flatten
+from domain.utils import flatten
 from neomodel import db, Q
 from neo4j.graph import Node
 
-from models import check_type
-from models.core import Knowde
-from models.core import KnowdeGraph
+from domain import check_type
+from domain.core import Knowde
+from domain.core import KnowdeGraph
 from .labels import Knowde as DbKnowde
 from .errors import NotFoundError, AlreadyExistsError
 

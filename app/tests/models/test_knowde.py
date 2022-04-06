@@ -1,8 +1,8 @@
 import pytest
 
-from models.core.description import Description
-from models.core.defenition import Defenition
-from models.core import Knowde, KnowdeLink, KnowdeGraph
+from domain.core.description import Description
+from domain.core.defenition import Defenition
+from domain.core import Knowde, KnowdeLink, KnowdeGraph
 
 
 def test_create_with_sorce_link():

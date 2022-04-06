@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from models import check_type
+from domain import check_type
 from .password import PlainPassword, HashedPassword, Password
 
 def authorize_exception(detail: str):

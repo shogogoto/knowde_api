@@ -1,5 +1,5 @@
 import pytest
-from models.auth import Credential, PlainPassword, HashedPassword
+from domain.auth import Credential, PlainPassword, HashedPassword
 
 value  = "secret"
 plain  = PlainPassword(value)

@@ -2,8 +2,8 @@ import pytest
 
 from repository import CredentialRepository, SpaceRepository
 
-from models.auth import Credential, PlainPassword
-from models.space import Space, SpaceRoot
+from domain.auth import Credential, PlainPassword
+from domain.space import Space, SpaceRoot
 from repository.errors import AlreadyExistsError, NotFoundError
 
 # MATCH (n) DETACH DELETE n

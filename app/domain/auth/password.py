@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Optional, Union
 
 from passlib.context import CryptContext
-from models import check_type
+from domain import check_type
 
 class Password(metaclass=ABCMeta):
     def __init__(self, value: str):

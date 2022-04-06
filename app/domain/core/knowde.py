@@ -1,5 +1,5 @@
 from typing import List, Union
-from models.utils import check_type
+from domain.utils import check_type
 
 
 class Knowde:

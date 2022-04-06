@@ -1,7 +1,7 @@
 import pytest
 
 from repository import UserRepository
-from models import user as U
+from domain import user as U
 
 repo = UserRepository()
 

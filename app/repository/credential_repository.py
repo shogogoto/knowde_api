@@ -1,7 +1,7 @@
 from neomodel import db
 
-from models.auth import Credential, PlainPassword, HashedPassword
-from models import check_type
+from domain.auth import Credential, PlainPassword, HashedPassword
+from domain import check_type
 from .labels import User as DbUser
 from .errors import NotFoundError, AlreadyExistsError
 

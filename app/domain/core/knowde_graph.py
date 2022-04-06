@@ -1,4 +1,4 @@
-from models.utils import check_type
+from domain.utils import check_type
 from typing import List
 import networkx as nx
 from .knowde import Knowde, KnowdeLink

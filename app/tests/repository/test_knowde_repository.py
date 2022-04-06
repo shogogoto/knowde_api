@@ -2,9 +2,9 @@ import pytest
 
 from repository import KnowdeRepository
 
-# from models.space import Space, SpaceRoot
-from models.core import Knowde
-from models.core import KnowdeGraph
+# from domain.space import Space, SpaceRoot
+from domain.core import Knowde
+from domain.core import KnowdeGraph
 
 from repository.errors import AlreadyExistsError, NotFoundError
 

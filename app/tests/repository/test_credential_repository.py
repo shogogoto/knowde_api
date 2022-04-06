@@ -1,7 +1,7 @@
 import pytest
 
 from repository import CredentialRepository
-from models.auth import Credential, PlainPassword
+from domain.auth import Credential, PlainPassword
 from repository.errors import AlreadyExistsError, NotFoundError
 
 

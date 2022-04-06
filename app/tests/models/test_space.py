@@ -1,5 +1,5 @@
 import pytest
-from models.space import Space, SpaceRoot, SpaceChain, AlreadyMergedError
+from domain.space import Space, SpaceRoot, SpaceChain, AlreadyMergedError
 from anytree.node.exceptions import LoopError
 
 

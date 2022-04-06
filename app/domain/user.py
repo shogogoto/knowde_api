@@ -1,5 +1,5 @@
-from models.utils import check_type
-
+from domain.utils import check_type
+from domain.space import Space
 
 class User:
     def __init__(self, **kwargs):
@@ -9,3 +9,9 @@ class User:
 
     def rename(self, name: str):
         self.__dict__["name"] = check_type(name, str)
+
+
+    def createSpace(self, **spaceAttrs):
+        id = self.__dict__.get("id")
+        return Space(id, **spaceAttrs)
+        pass

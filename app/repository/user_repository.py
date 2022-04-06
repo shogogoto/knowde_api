@@ -1,6 +1,6 @@
 from neomodel import db
 
-from models.user import User
+from domain.user import User
 from .labels import User as DbUser
 
 

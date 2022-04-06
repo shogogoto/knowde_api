@@ -1,6 +1,6 @@
 import pytest
 
-from models.auth import PlainPassword, HashedPassword
+from domain.auth import PlainPassword, HashedPassword
 
 
 def test_verify():

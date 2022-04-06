@@ -2,9 +2,9 @@ from neomodel import db
 from neomodel import Relationship
 from neo4j.graph import Node
 
-from models.utils import flatten
-from models import check_type
-from models.space import Space, SpaceRoot, SpaceChain
+from domain.utils import flatten
+from domain import check_type
+from domain.space import Space, SpaceRoot, SpaceChain
 from .labels import Space as DbSpace, User as DbUser
 from .errors import NotFoundError, AlreadyExistsError
 

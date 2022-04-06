@@ -10,7 +10,7 @@ from anytree import RenderTree
 import fastcache
 
 
-from models.utils import check_type
+from domain.utils import check_type
 
 
 class BaseSpace(AnyNode):
