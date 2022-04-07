@@ -72,6 +72,10 @@ class Credential:
     def hash(self):
         return self._password.hash()
 
+    def plainPassword(self) -> str:
+        if isinstance(self._password, PlainPassword):
+            return self._password.value
+
     def verify(self, password: str):
         check_type(password, str)
         return self._password.verify(password)
