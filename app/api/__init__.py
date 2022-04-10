@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi import APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import HTTPException
 from repository.errors import RepositoryError
+from domain.errors import DomainError
+from fastapi.responses import JSONResponse
 
 
 from . import user
@@ -34,6 +35,14 @@ app.include_router(router)
 
 @app.exception_handler(RepositoryError)
 async def repository_error_handler(request, err: RepositoryError):
-    raise HTTPException(
+    return JSONResponse(
         status_code=err.status_code,
-        detail=err.detail)
+        content={"detail": err.detail}
+    )
+
+@app.exception_handler(DomainError)
+async def domain_error_handler(request, err: DomainError):
+    return JSONResponse(
+            status_code=err.status_code,
+            content={"detail": err.detail}
+        )

@@ -8,12 +8,13 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 from domain import check_type
+from domain.errors import DomainError
 from .password import PlainPassword, HashedPassword, Password
 
 def authorize_exception(detail: str):
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail=detal,
+        detail=detail,
         headers={"WWW-Authenticate": "Bearer"}
     )
 

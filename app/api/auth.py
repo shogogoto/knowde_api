@@ -4,13 +4,15 @@ from fastapi import Depends
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 from fastapi.param_functions import Form
-
-from domain.auth import Credential, PlainPassword
-from repository import CredentialRepository
-from repository.errors import AlreadyExistsError
+from usecase import AuthUsecase
+from dependency import DIContainer
+from .errors import error_response
+from domain.errors import DomainError, UnauthorizedError
 
 router = APIRouter()
 
+
+usecase = DIContainer().resolve(AuthUsecase)
 
 # @router.exception_handler(AlreadyExistsError)
 # async def error_handler(request, err: AlreadyExistsError):
@@ -18,35 +20,29 @@ router = APIRouter()
 #         status_code=status.HTTP_409_CONFLICT,
 #         detail=str(e)
 #     )
+class CredentialForm(BaseModel):
+    userId: str = Form(...)
+    password: str = Form(...)
+
 class RepasswordForm(BaseModel):
-    grant_type: str = Form(None, regex="password")
-    username: str   = Form(...)
-    password: str   = Form(...)
-    repassword: str = Form(...)
+    userId: str   = Form(...)
+    current_password: str = Form(...)
+    new_password: str = Form(...)
 
 
-@router.post("/users", tags=["users"])
-async def create_credential(form_data: OAuth2PasswordRequestForm = Depends()):
-    p    = PlainPassword(form_data.password)
-    cred = Credential(form_data.username, p)
-    repo = CredentialRepository()
-    repo.create(cred)
-    return {"test": "test"}
+@router.post("/users", tags=["auth"],
+    responses=error_response([UnauthorizedError]))
+async def create_credential(form_data: CredentialForm = Depends()):
+    usecase.registerCredential(**form_data.dict())
+    return
 
-@router.put("/users", tags=["users"])
+@router.put("/users", tags=["auth"])
 async def repassword_user(form_data: RepasswordForm = Depends()):
-    oldPwd = PlainPassword(form_data.password)
-    newPwd = PlainPassword(form_data.repassword)
-    oldCred = Credential(form_data.username, oldPwd)
-    newCred = Credential(form_data.username, newPwd)
-    repo = CredentialRepository()
-    repo.update(oldCred, newCred)
-    return {}
+    usecase.repassword(**form_data.dict())
+    return form_data.dict()
 
-@router.delete("/users", tags=["users"])
-async def delete_user(form_data: OAuth2PasswordRequestForm = Depends()):
-    p    = PlainPassword(form_data.password)
-    cred = Credential(form_data.username, p)
-    repo = CredentialRepository()
-    repo.delete(cred)
-    return {}
+
+@router.delete("/users", tags=["auth"])
+async def delete_user(form_data: CredentialForm = Depends()):
+    usecase.deleteCredential(**form_data.dict())
+    return form_data.json()

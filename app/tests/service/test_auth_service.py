@@ -4,6 +4,7 @@ from repository import CredentialRepository
 from domain.service import AuthService
 from domain.auth import Credential, PlainPassword
 from repository.errors import AlreadyExistsError, NotFoundError
+from domain.errors import UnauthorizedError
 
 
 repo = CredentialRepository()
@@ -30,7 +31,7 @@ def test_fail_repassword(fn):
     repo.create(cred)
     cred2 = Credential(userId, PlainPassword("diff_password"))
     new   = Credential(userId, PlainPassword("new_password"))
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(UnauthorizedError) as e:
         service.repassword(cred2, new)
 
 @pytest.mark.slow
@@ -50,7 +51,7 @@ def test_fail_delete(fn):
     repo.create(cred)
     newpwd = "new_passwd"
     new    = Credential(userId, PlainPassword(newpwd))
-    with pytest.raises(ValueError):
+    with pytest.raises(UnauthorizedError):
         service.deleteCredential(new)
 
 @pytest.mark.slow
