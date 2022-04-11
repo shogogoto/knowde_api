@@ -14,7 +14,7 @@ class AuthService:
         if not self.exists(cred):
             raise UnauthorizedError("id or password is invalid")
 
-    def deleteCredential(self, cred: Credential):
+    def withdraw(self, cred: Credential):
         self.authenticate(cred)
         self.__gw.delete(cred)
 

@@ -10,16 +10,8 @@ from .errors import error_response
 from domain.errors import DomainError, UnauthorizedError
 
 router = APIRouter()
-
-
 usecase = DIContainer().resolve(AuthUsecase)
 
-# @router.exception_handler(AlreadyExistsError)
-# async def error_handler(request, err: AlreadyExistsError):
-#     raise HTTPException(
-#         status_code=status.HTTP_409_CONFLICT,
-#         detail=str(e)
-#     )
 class CredentialForm(BaseModel):
     userId: str = Form(...)
     password: str = Form(...)
@@ -33,8 +25,8 @@ class RepasswordForm(BaseModel):
 @router.post("/users", tags=["auth"],
     responses=error_response([UnauthorizedError]))
 async def create_credential(form_data: CredentialForm = Depends()):
-    usecase.registerCredential(**form_data.dict())
-    return
+    cred = usecase.registerCredential(**form_data.dict())
+    return cred
 
 @router.put("/users", tags=["auth"])
 async def repassword_user(form_data: RepasswordForm = Depends()):

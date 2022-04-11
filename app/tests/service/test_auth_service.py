@@ -35,7 +35,7 @@ def test_fail_repassword(fn):
         service.repassword(cred2, new)
 
 @pytest.mark.slow
-def test_update(fn):
+def test_repassword(fn):
     repo.create(cred)
     newpwd = "new_passwd"
     new    = Credential(userId, PlainPassword(newpwd))
@@ -47,17 +47,17 @@ def test_update(fn):
 
 
 @pytest.mark.slow
-def test_fail_delete(fn):
+def test_fail_withdraw(fn):
     repo.create(cred)
     newpwd = "new_passwd"
     new    = Credential(userId, PlainPassword(newpwd))
     with pytest.raises(UnauthorizedError):
-        service.deleteCredential(new)
+        service.withdraw(new)
 
 @pytest.mark.slow
-def test_delete(fn):
+def test_withdraw(fn):
     repo.create(cred)
-    service.deleteCredential(cred)
+    service.withdraw(cred)
     assert not service.exists(cred)
 
 

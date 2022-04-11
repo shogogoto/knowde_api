@@ -9,15 +9,13 @@ from .errors import NotFoundError, AlreadyExistsError
 
 class CredentialRepository(CredentialGateway):
     def create(self, cred: Credential):
-        check_type(cred, Credential)
-        dbuser = DbUser.nodes.get_or_none(uid=cred.userId)
+        dbuser = self.__findById(cred.userId)
         if dbuser is not None:
             raise AlreadyExistsError()
         return self._encode(cred).save()
 
     def update(self, cred: Credential):
-        check_type(cred, Credential)
-        dbuser = DbUser.nodes.get_or_none(uid=cred.userId)
+        dbuser = self.__findById(cred.userId)
         if dbuser is None:
             raise NotFoundError()
         DbUser.create_or_update({
@@ -26,14 +24,16 @@ class CredentialRepository(CredentialGateway):
         })
 
     def delete(self, cred: Credential):
-        check_type(cred, Credential)
-        dbuser = DbUser.nodes.get_or_none(uid=cred.userId)
+        dbuser = self.__findById(cred.userId)
         dbuser.delete()
 
     def findById(self, userId: str) -> Credential:
+        dbuser = self.__findById(userId)
+        return self._decode(dbuser)
+
+    def __findById(self, userId: str):
         check_type(userId, str)
-        user = DbUser.nodes.get_or_none(uid=userId)
-        return self._decode(user)
+        return DbUser.nodes.get_or_none(uid=userId)
 
     def _encode(self, cred: Credential):
         return DbUser(

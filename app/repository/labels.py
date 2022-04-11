@@ -60,3 +60,15 @@ class Knowde(StructuredNode):
     dest = RelationshipTo("Knowde", "LINK")
 
 
+##  個々のユーザのKnowdeを繋ぐi
+##    評価が最も高いものを表示する
+class GlobalSpace(StructuredNode):
+    uid =  UniqueIdProperty()
+
+
+class GlobalKnowde(StructuredNode):
+    uid =  UniqueIdProperty()
+
+
+class GlobalReference(StructuredNode):
+    uid =  UniqueIdProperty()
