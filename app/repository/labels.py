@@ -46,6 +46,27 @@ class Space(StructuredNode):
     references = RelationshipTo("Reference", "BELONG_TO")
     knowds     = RelationshipTo("Knowde", "BELONG_TO")
 
+    @classmethod
+    def findRoots(cls):
+        result, meta = db.cypher_query("""
+            MATCH (s:Space)
+            WHERE NOT ()-->(s)
+            AND size((s)-->()) > 1
+            RETURN s
+        """)
+        return [cls.inflate(row[0]) for row in result]
+
+    # relの連鎖取得できなかった
+    # def tree(self):
+    #     # params =
+    #     result, columns = self.cypher("""
+    #         MATCH (r)-[rel*]->(s:Space)
+    #         WHERE id(r) = $self
+    #         RETURN rel, r, s
+    #     """)
+    #     print(columns)
+    #     return [row[0] for row in result]
+
 class Reference(StructuredNode):
     uid    = UniqueIdProperty()
     name   = StringProperty(required=True)
@@ -56,11 +77,11 @@ class Reference(StructuredNode):
 class Knowde(StructuredNode):
     uid  = UniqueIdProperty()
     name = StringProperty(index=True, required=True)
-    src  = RelationshipFrom("Knowde", "LINK") # sourceという名前が使用済みで使えなかった
-    dest = RelationshipTo("Knowde", "LINK")
+    src  = RelationshipFrom("Knowde", "DEPEND_ON") # sourceという名前が使用済みで使えなかった
+    dest = RelationshipTo("Knowde", "DEPEND_ON")
 
 
-##  個々のユーザのKnowdeを繋ぐi
+##  個々のユーザのKnowdeを繋ぐ
 ##    評価が最も高いものを表示する
 class GlobalSpace(StructuredNode):
     uid =  UniqueIdProperty()

@@ -12,3 +12,4 @@ anytree==2.8.0
 fastcache==1.1.0
 networkx==2.7.1
 injector==0.19.0
+ordered-set==4.1.0

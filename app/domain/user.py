@@ -1,17 +1,27 @@
 from domain.utils import check_type
 from domain.space import Space
 
+
 class User:
-    def __init__(self, **kwargs):
-        self.__dict__["id"]      = kwargs.get("id")
-        self.__dict__["name"]    = kwargs.get("name")
-        self.__dict__["created"] = kwargs.get("created")
+    def __init__(self, id: str, **kwargs):
+        self.__id   = check_type(id, str)
+        self._dict = kwargs
 
-    def rename(self, name: str):
-        self.__dict__["name"] = check_type(name, str)
+    @property
+    def id(self):
+        return self.__id
 
+    @property
+    def name(self):
+        return self._dict.get("name")
 
-    def createSpace(self, **spaceAttrs):
-        id = self.__dict__.get("id")
-        return Space(id, **spaceAttrs)
-        pass
+    @property
+    def created(self):
+        return self._dict.get("created")
+
+    def json(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "created": self.created
+        }

@@ -1,30 +1,25 @@
 from neomodel import db
 
+from domain.gateway import UserGateway
 from domain.user import User
+from domain.utils import check_type
 from .labels import User as DbUser
 
 
-
-class UserRepository:
-    def create(self, user: User):
-        dbuser = DbUser.nodes.get_or_none(uid=user.id)
-        if dbuser is not None:
-            raise Exception
-        self._encode(user).save()
-
+class UserRepository(UserGateway):
     def update(self, user: User):
         dbuser = DbUser.nodes.get_or_none(uid=user.id)
-        if dbuser is None:
-            raise Exception
-        self._encde(user).save()
-
-    def delete(self, userId: str):
-        user = DbUser.nodes.get_or_none(uid=userId)
-        user.delete()
-        return self._decode(user)
+        dbuser.name = user.name
+        return self._decode(dbuser.save())
 
     def findById(self, userId: str):
+        check_type(userId, str)
         user = DbUser.nodes.get_or_none(uid=userId)
+        return self._decode(user)
+
+    def findByName(self, userName: str):
+        check_type(userName, str)
+        user = DbUser.nodes.get_or_none(name=userName)
         return self._decode(user)
 
     def findAll(self):
@@ -33,9 +28,16 @@ class UserRepository:
     def _encode(self, user: User):
         return DbUser(
             uid=user.id,
-            name=user.name
+            name=user.name,
+            created=user.created
         )
 
     def _decode(self, user: DbUser):
-        return User(**user.__properties__) if user is not None else None
+        if user is None:
+            return None
+        return User(
+            id=user.uid,
+            name=user.name,
+            created=user.created
+        )
 
