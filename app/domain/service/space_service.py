@@ -10,11 +10,24 @@ class SpaceService:
     def __init__(self, gw: SpaceGateway):
         self.__gw = check_type(gw, SpaceGateway)
 
-    def create(self, space):
-        pass
-    # def deleteSpace(self, cred: Credential):
-    #     self.authenticate(cred)
-    #     self.__gw.delete(cred)
+    def createRoot(self, space: Space):
+        roots = self.__gw.findRoots()
+        if roots is not None:
+            names = [root.name for root in roots]
+            if space.name in names:
+                raise SpaceNameDuplicateError
+        self.__gw.create(space)
+
+    def createSub(self, parentId: str, space: Space):
+        if self.isDuplicateName(parentId, space.name):
+            raise SpaceNameDuplicateError
+        self.__gw.createSubSpace(parentId, space)
+
+    def move(self, targetId:str, toId: str):
+        s = self.__gw.findById(targetId)
+        if self.isDuplicateName(toId, s.name):
+            raise SpaceNameDuplicateError
+        self.__gw.move(targetId, toId)
 
     def exists(self, space: Space):
         found = self.__gw.findById(space.id)
@@ -22,6 +35,8 @@ class SpaceService:
 
     def isDuplicateName(self, spaceId: str, name: str):
         space = self.__gw.findBatch(spaceId)
+        if space is None:
+            return False
         names = [c.name for c in space.children]
         return name in names
 

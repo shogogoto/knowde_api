@@ -1,10 +1,10 @@
-from injector import inject, singleton
+from injector import inject
 
 from domain.utils import check_type
 from domain.gateway import CredentialGateway
 from domain.service import AuthService
 from domain.auth import Credential, PlainPassword
-from fastapi import HTTPException
+
 
 class AuthUsecase:
     @inject

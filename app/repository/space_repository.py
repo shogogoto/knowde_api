@@ -93,20 +93,22 @@ class SpaceRepository(SpaceGateway):
         return self._decode(dbs)
 
     def findRoots(self):
-        result, meta = db.cypher_query("""
-            MATCH (s1)-[rel:CONTAINS*]->(s2:Space)
-            RETURN rel, s1, s2
-        """)
-        chains = []
-        for row in result:
-            rels = row[0]
-            sps  = [[self._decode(DbSpace.inflate(n)) for n in rel.nodes] for rel in rels]
-            chain = SpaceChain.createByPairs(sps)
-            root = Space(id="global_root", name="global_root")
-            chain.extendHead(root)
-            chains.append(chain)
-            chain.root.print()
-        return SpaceChain.batchMerge(chains)
+        return [self._decode(s) for s in DbSpace.findRoots()]
+        # result, meta = db.cypher_query("""
+        #     MATCH (s1)-[rel:CONTAINS*]->(s2:Space)
+        #     RETURN rel, s1, s2
+        # """)
+        # print(result)
+        # chains = []
+        # for row in result:
+        #     rels = row[0]
+        #     sps  = [[self._decode(DbSpace.inflate(n)) for n in rel.nodes] for rel in rels]
+        #     chain = SpaceChain.createByPairs(sps)
+        #     root = Space(id="global_root", name="global_root")
+        #     chain.extendHead(root)
+        #     chains.append(chain)
+        #     chain.root.print()
+        # return SpaceChain.batchMerge(chains)
 
     def __find(self, spaceId: str):
         check_type(spaceId, str)
